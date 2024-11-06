@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-unused-vars */
+
 import React, { useEffect, useRef, useState } from 'react';
 import * as todoService from './api/todos';
 import { USER_ID } from './api/todos';
@@ -6,6 +9,7 @@ import { Header } from './components/Header/Header';
 import { Footer } from './components/Footer/Footer';
 import { TodoList } from './components/TodoList/TodoList';
 import { Notifications } from './components/Notifications/Notifications';
+import { deleteTodos } from './components/deleteTodos';
 
 export enum Filter {
   All = 'all',
@@ -125,19 +129,6 @@ export const App: React.FC = () => {
       .finally(() => {
         setDeletingId(null);
       });
-  };
-
-  const deleteTodos = (todoIds: number[]) => {
-    const promices = todoIds.map(todoId => todoService.deleteTodo(todoId));
-
-    return Promise.allSettled(promices).then(results => {
-      const errors = results.filter(result => result.status === 'rejected');
-      const successIds = results
-        .filter(result => result.status === 'fulfilled')
-        .map(result => result.value.id);
-
-      return { errors, successIds };
-    });
   };
 
   const deleteCompletedTodos = () => {
